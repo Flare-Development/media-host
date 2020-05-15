@@ -1,3 +1,4 @@
+
 <script>
 var elem = document.getElementById("body");
 function openFullscreen() {
@@ -14,15 +15,194 @@ function openFullscreen() {
 </script>
 
 <div id="content">
-  <input type="file" id="thefile" accept="audio/*" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <button id="myBtn" class="btn"><i class="fa fa-folder"></i> Upload</button>
+  <button id="myBtnt" class="btn2"><i class="fa fa-close"></i> Close</button>
   
-  <button style="height:100px;" onclick="openFullscreen()">Fullscreen</button>
+  
   <canvas id="canvas"></canvas>
   <audio id="audio" controls></audio>
+
+ 
+<style>
+  .btn {
+  background-color: DodgerBlue; /* Blue background */
+  border: none; /* Remove borders */
+  color: white; /* White text */
+  padding: 12px 16px; /* Some padding */
+  font-size: 16px; /* Set a font size */
+  cursor: pointer; /* Mouse pointer on hover */
+}
+
+/* Darker background on mouse-over */
+.btn:hover {
+  background-color: RoyalBlue;
+}
+.btn2 {
+  background-color: DodgerBlue; /* Blue background */
+  border: none; /* Remove borders */
+  color: white; /* White text */
+  padding: 12px 16px; /* Some padding */
+  font-size: 16px; /* Set a font size */
+  cursor: pointer; /* Mouse pointer on hover */
+  display:none;
+}
+
+/* Darker background on mouse-over */
+.btn2:hover {
+  background-color: RoyalBlue;
+}
+body {font-family: Arial, Helvetica, sans-serif;}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+ 
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+ margin:auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 70%;
+  height: 70%;
+  border-radius:20px 20px 20px 20px;
+  left: 50%;
+  top: 50%;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+.btn {
+  background-color: DodgerBlue;
+  border: none;
+  color: white;
+  padding: 12px 16px;
+  font-size: 16px;
+  cursor: pointer;
+  top:50%; 
+  position: relative;
+}
+.modal-content input {
+
+}
+/* Darker background on mouse-over */
+.btn:hover {
+  background-color: RoyalBlue;
+}
+</style>
+</head>
+
+
+
+
+<!-- Trigger/Open The Modal -->
+
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <center>
+       <h1>Upload Media</h1>
+    
+       <input class="btn" type="file" id="thefile" title="Upload" accept="audio/*"> </input>
+        </center>
+  </div>
+
+</div>
+
+<script>
+var myAudio = document.getElementById('audio');
+
+if (myAudio.duration > 0 && !myAudio.paused) {
+
+    console.log("Playing")
+
+} else {
+ console.log("Stoped")
+    //Not playing...maybe paused, stopped or never played.
+
+}
+
+
+// Get the modal
+var modal = document.getElementById("myModal");
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+var btnt = document.getElementById("myBtnt");
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+var vid = document.getElementById("audio");
+// When the user clicks the button, open the modal 
+btn.onclick = function() {
+  modal.style.display = "block";
+  btn.style.display = "none";
+  btnt.style.display = "block";
+  if (vid.volume < 0.5) return;
+vid.volume = 0.5;
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+  btn.style.display = "block";
+  btnt.style.display = "none";
+  if (vid.volume < 0.5) return;
+
+  vid.volume = 1;
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+    btn.style.display = "block";
+  btnt.style.display = "none";
+    if (vid.volume < 0.5) return;
+    vid.volume = 1;
+  }
+}
+</script>
+
+
+
+
 </div>
 
 <style>
-#thefile {
+#myBtn {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 100;
+}
+#myBtnt {
   position: fixed;
   top: 10px;
   left: 10px;
@@ -41,11 +221,20 @@ audio {
   position: fixed;
   left: 10px;
   bottom: 10px;
+  opacity:0.3;
+  color: blue;
+  transition: 0.3s;
   width: calc(100% - 20px);
 }
+ #audio:hover {
+  
+   opacity: 1;
+ }
 
 
 </style>
+
+
 <script>
 window.onload = function() {
   
