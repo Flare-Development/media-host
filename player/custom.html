@@ -21,7 +21,7 @@ function openFullscreen() {
   
   
   <canvas id="canvas"></canvas>
-  <audio id="audio" controls></audio>
+  <audio id="audio"></audio>
 
  
 <style>
@@ -78,6 +78,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
   height: 70%;
   border-radius:20px 20px 20px 20px;
   left: 50%;
+  overflow:auto;
   top: 50%;
 }
 
@@ -112,6 +113,43 @@ body {font-family: Arial, Helvetica, sans-serif;}
 .btn:hover {
   background-color: RoyalBlue;
 }
+.slidecontainer {
+  width: 80%;
+}
+
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 25px;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  border-radius:5px 5px 5px 5px;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.slider:hover {
+  opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  background: #178EF0;
+  cursor: pointer;
+  border-radius:5px 5px 5px 5px;
+}
+
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  background: #178EF0;
+  cursor: pointer;
+  border-radius:5px 5px 5px 5px;
+}
 </style>
 </head>
 
@@ -131,6 +169,28 @@ body {font-family: Arial, Helvetica, sans-serif;}
        <h1>Upload Media</h1>
     
        <input class="btn" type="file" id="thefile" title="Upload" accept="audio/*"> </input>
+       <p></p>
+       <hr/>
+       <p></p>
+       <h2>Audio Controls</h2>
+       <button id="looper" class="btn"><i class="fa fa-repeat"></i> Loop</button><button style="display:none;" id="unlooper" class="btn"><i class="fa fa-times-circle"></i> Unloop</button>   <button id="conts" class="btn"><i class="fa fa-list"></i> Show Controls</button>   <button id="contsOff" style="display:none;" class="btn"><i class="fa fa-outdent"></i> Hide Controls</button>
+      <p></p>
+      <hr/>
+      <p></p>
+      <h2>Volume:</h2>
+      <input type="range" min="0" max="100" value="100" class="slider" id="vol-control" oninput="SetVolume(this.value)" onchange="SetVolume(this.value)">
+      <h3><span id="audioOutput"></span></h3>
+       
+
+<script>
+    function SetVolume(val)
+    {
+        var player = document.getElementById('audio');
+        console.log('Before: ' + player.volume);
+        player.volume = val / 100;
+        console.log('After: ' + player.volume);
+    }
+</script>
         </center>
   </div>
 
@@ -156,16 +216,58 @@ var modal = document.getElementById("myModal");
 // Get the button that opens the modal
 var btn = document.getElementById("myBtn");
 var btnt = document.getElementById("myBtnt");
+var loop = document.getElementById("looper");
+var loopr = document.getElementById("unlooper");
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
 var vid = document.getElementById("audio");
 // When the user clicks the button, open the modal 
+var slider = document.getElementById("vol-control");
+var output = document.getElementById("audioOutput");
+var controlsOff = document.getElementById("contsOff");
+var controlsOn = document.getElementById("conts");
+output.innerHTML = slider.value;
+
+slider.oninput = function() {
+  if (slider.value == "0") {
+    output.innerHTML = "Muted";
+   return;
+  } 
+  if (slider.value == "100") {
+    output.innerHTML = "MAX - 100%";
+   return;
+  } 
+  output.innerHTML = `${this.value}%`;
+
+}
+
+
+controlsOn.onclick = function() {
+   vid.controls = true;
+   controlsOn.style.display = "none";
+   controlsOff.style.display = "inline";
+}
+controlsOff.onclick = function() {
+   vid.controls = false;
+   controlsOn.style.display = "inline";
+   controlsOff.style.display = "none";
+}
+loop.onclick = function() {
+  vid.loop = true;
+  loopr.style.display = "inline";
+  loop.style.display = "none";
+}
+loopr.onclick = function() {
+  vid.loop = false;
+  loopr.style.display = "none";
+  loop.style.display = "inline";
+}
+
 btn.onclick = function() {
   modal.style.display = "block";
   btn.style.display = "none";
   btnt.style.display = "block";
-  if (vid.volume < 0.5) return;
-vid.volume = 0.5;
+  
 }
 
 // When the user clicks on <span> (x), close the modal
@@ -173,9 +275,7 @@ span.onclick = function() {
   modal.style.display = "none";
   btn.style.display = "block";
   btnt.style.display = "none";
-  if (vid.volume < 0.5) return;
-
-  vid.volume = 1;
+ 
 }
 
 // When the user clicks anywhere outside of the modal, close it
@@ -184,8 +284,7 @@ window.onclick = function(event) {
     modal.style.display = "none";
     btn.style.display = "block";
   btnt.style.display = "none";
-    if (vid.volume < 0.5) return;
-    vid.volume = 1;
+   
   }
 }
 </script>
@@ -279,7 +378,7 @@ window.onload = function() {
 
       analyser.getByteFrequencyData(dataArray);
 
-      ctx.fillStyle = "#000";
+      ctx.fillStyle = "#000000";
       ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
       for (var i = 0; i < bufferLength; i++) {
