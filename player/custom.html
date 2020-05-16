@@ -16,7 +16,7 @@ function openFullscreen() {
 
 <div id="content">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <button id="myBtn" class="btn"><i class="fa fa-folder"></i> Upload</button>
+  <button id="myBtn" class="btn"><i class="fa fa-arrows-alt"></i> Menu</button>
   <button id="myBtnt" class="btn2"><i class="fa fa-close"></i> Close</button>
   
   
@@ -80,6 +80,9 @@ body {font-family: Arial, Helvetica, sans-serif;}
   left: 50%;
   overflow:auto;
   top: 50%;
+  -webkit-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.7);
+-moz-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.7);
+box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.7);
 }
 
 /* The Close Button */
@@ -174,12 +177,19 @@ body {font-family: Arial, Helvetica, sans-serif;}
        <p></p>
        <h2>Audio Controls</h2>
        <button id="looper" class="btn"><i class="fa fa-repeat"></i> Loop</button><button style="display:none;" id="unlooper" class="btn"><i class="fa fa-times-circle"></i> Unloop</button>   <button id="conts" class="btn"><i class="fa fa-list"></i> Show Controls</button>   <button id="contsOff" style="display:none;" class="btn"><i class="fa fa-outdent"></i> Hide Controls</button>
+      
+    
       <p></p>
       <hr/>
       <p></p>
       <h2>Volume:</h2>
       <input type="range" min="0" max="100" value="100" class="slider" id="vol-control" oninput="SetVolume(this.value)" onchange="SetVolume(this.value)">
       <h3><span id="audioOutput"></span></h3>
+      
+      <hr>
+     <span id="sid"></span>
+      <footer>All these settings are static, they reset every session.</footer>
+      <p>&copy; Quantumapp</p>
        
 
 <script>
@@ -226,6 +236,9 @@ var slider = document.getElementById("vol-control");
 var output = document.getElementById("audioOutput");
 var controlsOff = document.getElementById("contsOff");
 var controlsOn = document.getElementById("conts");
+var sessionID = document.getElementById("sid");
+var getNumID = Math.floor(Math.random() * 10000000)
+var sid = false;
 output.innerHTML = slider.value;
 
 slider.oninput = function() {
@@ -244,6 +257,8 @@ slider.oninput = function() {
 
 controlsOn.onclick = function() {
    vid.controls = true;
+   
+   
    controlsOn.style.display = "none";
    controlsOff.style.display = "inline";
 }
@@ -264,9 +279,21 @@ loopr.onclick = function() {
 }
 
 btn.onclick = function() {
+  if (!sid) {
+     sessionID.innerHTML = `Session ID: ${getNumID}`;
+     var sid = "psss";
+   }
   modal.style.display = "block";
   btn.style.display = "none";
   btnt.style.display = "block";
+  btn.innerHTML = "<i class=\"fa fa-arrows-alt\"></i>";
+  
+}
+btnt.onclick = function() {
+  modal.style.display = "none";
+  btn.style.display = "block";
+  btnt.style.display = "none";
+  btnt.innerHTML = "<i class=\"fa fa-close\"></i>";
   
 }
 
